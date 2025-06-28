@@ -8,6 +8,7 @@ import com.caio.PedidoProduto.dto.PedidoDTO;
 import com.caio.PedidoProduto.dto.PedidoResponseDTO;
 import com.caio.PedidoProduto.model.Usuario;
 import com.caio.PedidoProduto.provider.TokenProvider;
+import com.caio.PedidoProduto.repository.UsuarioRepository;
 import com.caio.PedidoProduto.service.PedidoService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,13 +20,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Tag(name = "Pedidos", description = "Endpoints para criação e listagem de pedidos")
 public class PedidoController {
- private final PedidoService pedidoService;
+
+    private final PedidoService pedidoService;
     private final TokenProvider tokenProvider;
+    private final UsuarioRepository usuarioRepository;
 
     @PostMapping
     public ResponseEntity<PedidoResponseDTO> criarPedido(@RequestBody PedidoDTO dto, HttpServletRequest request) {
         String token = tokenProvider.getTokenFromHttpRequest(request);
-        Usuario usuario = (Usuario) tokenProvider.getAuthentication(token).getPrincipal();
+        String email = tokenProvider.getDecodedToken(token).getSubject(); // JWT subject = email
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         PedidoResponseDTO response = pedidoService.criarPedido(dto, usuario);
         return ResponseEntity.ok(response);
@@ -38,7 +43,9 @@ public class PedidoController {
             @RequestParam(defaultValue = "10") int tamanho) {
 
         String token = tokenProvider.getTokenFromHttpRequest(request);
-        Usuario usuario = (Usuario) tokenProvider.getAuthentication(token).getPrincipal();
+        String email = tokenProvider.getDecodedToken(token).getSubject(); // JWT subject = email
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         Page<PedidoResponseDTO> pedidos = pedidoService.listarPedidosDoUsuario(usuario, pagina, tamanho);
         return ResponseEntity.ok(pedidos);

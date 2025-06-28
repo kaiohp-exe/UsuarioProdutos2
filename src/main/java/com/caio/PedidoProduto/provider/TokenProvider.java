@@ -43,10 +43,10 @@ public class TokenProvider {
 
     public String getToken(Usuario userModel){
         Algorithm alg = Algorithm.HMAC256(secret);
-        try {
+        try {   
             String jwt = JWT.create()
                     .withIssuer(issuer)
-                    .withSubject(userModel.getNome())
+                    .withSubject(userModel.getEmail()) // <- AQUI
                     .withExpiresAt(Date.from(getTokenExpireTime()))
                     .sign(alg);
             return jwt;
