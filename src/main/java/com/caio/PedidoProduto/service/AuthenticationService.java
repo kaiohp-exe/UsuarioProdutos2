@@ -30,10 +30,10 @@ public class AuthenticationService {
     private TokenProvider tokenProvider;
 
     public AuthResponseDto login(AuthRequestDto authRequest){
-        var userNamePasswd = new UsernamePasswordAuthenticationToken(authRequest.userName(), authRequest.password());
+        var userNamePasswd = new UsernamePasswordAuthenticationToken(authRequest.nome(), authRequest.password());
         var auth = authenticationManager.authenticate(userNamePasswd);
         var token = tokenProvider.getToken((Usuario) auth.getPrincipal());
-        return new AuthResponseDto(authRequest.userName(), token);
+        return new AuthResponseDto(authRequest.nome(), token);
     }
 
     public Usuario register(RegisterDto registerData){

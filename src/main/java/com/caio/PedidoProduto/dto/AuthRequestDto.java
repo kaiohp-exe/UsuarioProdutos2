@@ -1,4 +1,4 @@
 package com.caio.PedidoProduto.dto;
 
-public record AuthRequestDto(String userName, String password) {
+public record AuthRequestDto(String nome, String password) {
 }

@@ -2,8 +2,10 @@ package com.caio.PedidoProduto.service;
 
 
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.caio.PedidoProduto.dto.ProdutoDTO;
@@ -21,12 +23,12 @@ public class ProdutoService {
     public ProdutoDTO criarProduto(ProdutoDTO dto){
         Produto produto = modelMapper.map(dto, Produto.class);
         Produto salvo = produtoRepository.save(produto);
-        return modelMapper.map(salvo,ProdutoDTO.class);
+        return modelMapper.map(salvo, ProdutoDTO.class);
     }
 
     public ProdutoDTO atualizarProduto(Long id, ProdutoDTO dto){
         Produto produto = produtoRepository.findById(id)
-        .orElseThrow(()-> new RuntimeException("Produto nao encontrado"));
+        .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
         produto.setNome(dto.getNome());
         produto.setDescricao(dto.getDescricao());
@@ -36,7 +38,7 @@ public class ProdutoService {
         return modelMapper.map(atualizado, ProdutoDTO.class);
     }
 
-     public void deletarProduto(Long id) {
+    public void deletarProduto(Long id) {
         produtoRepository.deleteById(id);
     }
 
