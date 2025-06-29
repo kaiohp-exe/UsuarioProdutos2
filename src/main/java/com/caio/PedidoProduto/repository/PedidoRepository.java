@@ -9,6 +9,6 @@ import com.caio.PedidoProduto.model.Usuario;
 
 
 
-public interface PedidoRepository extends JpaRepository<Pedido,Long>{
+public interface    PedidoRepository extends JpaRepository<Pedido,Long>{
     Page<Pedido> findByUsuario(Usuario usuario, Pageable pageable);
 }

@@ -26,7 +26,6 @@ public class SecurityConfig {
 
     @Autowired
     CustomAuthenticationFilter customAuthenticationFilter;
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -34,7 +33,11 @@ public class SecurityConfig {
                 .cors(cors -> {})  
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorized -> authorized
-                        .requestMatchers("/docs", "/docs/**", "/swagger-ui/**").permitAll()
+                        .requestMatchers(
+                            "/swagger-ui.html",
+                            "/swagger-ui/**",
+                            "/v3/api-docs/**"
+                        ).permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/authors/**", "/books/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
