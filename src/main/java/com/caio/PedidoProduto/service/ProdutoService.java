@@ -53,4 +53,5 @@ public class ProdutoService {
         Page<Produto> produtosPage = produtoRepository.findAll(pageable);
         return produtosPage.map(produto -> modelMapper.map(produto, ProdutoDTO.class));
     }
+    
 }

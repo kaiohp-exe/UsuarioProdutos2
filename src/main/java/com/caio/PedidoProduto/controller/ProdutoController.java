@@ -59,4 +59,5 @@ public class ProdutoController {
         Page<ProdutoDTO> produtos = produtoService.listarProdutos(pagina, tamanho);
         return ResponseEntity.ok(produtos);
     }
+    
 }
